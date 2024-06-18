@@ -6,7 +6,7 @@ def custom_login(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             # Process login logic here
-            return HttpResponseRedirect('/success/')
+            return HttpResponseRedirect('/success/')  # Redirect to success page
     else:
         form = AuthenticationForm()
 
