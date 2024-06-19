@@ -11,7 +11,13 @@
 
       <v-card-text class="bg-surface-light pt-4">
         <v-text-field label="Email" prepend-icon="mdi-email"></v-text-field>
-        <v-text-field label="Password" prepend-icon="mdi-key"></v-text-field>
+        <v-text-field
+          :append-inner-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="visible ? 'text' : 'password'"
+          label="Password"
+          prepend-icon="mdi-key"
+          @click:append-inner="visible = !visible"
+        ></v-text-field>
         <v-btn style="margin-left: 38%">
           Login
         </v-btn>
@@ -20,5 +26,10 @@
     <p style="text-align: center; margin-top: 18%;">&copy Blavblav Inc - June 2024</p>
   </v-app>
 </template>
-<script setup lang="ts">
+<script>
+export default {
+  data: () => ({
+    visible: false,
+  }),
+}
 </script>
