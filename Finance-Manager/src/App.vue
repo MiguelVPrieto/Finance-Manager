@@ -1,6 +1,6 @@
 <template>
   <v-app theme="dark">
-    <router-view style="margin-top: -2.5%">
+    <router-view style="margin-top: -2.6%">
 
     </router-view>
   </v-app>
