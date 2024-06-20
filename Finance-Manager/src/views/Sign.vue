@@ -12,13 +12,8 @@
       <v-card-text class="bg-surface-light pt-4">
         <v-form fast-fail @submit.prevent>
 
-          <v-text-field label="Email" prepend-icon="mdi-email"></v-text-field>
-          <v-text-field
-            v-model="firstName"
-            :rules="firstNameRules"
-            label="First name"
-          ></v-text-field>
-
+          <v-text-field v-model="email" :rules="emailRules" label="Email" prepend-icon="mdi-email"></v-text-field>
+          <v-text-field v-model="firstName" :rules="firstNameRules" label="First Name" prepend-icon="mdi-email"></v-text-field>
           <v-text-field
             v-model="lastName"
             :rules="lastNameRules"
