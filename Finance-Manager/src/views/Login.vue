@@ -21,7 +21,7 @@
         <v-btn style="margin-left: 38%;">
           Login
         </v-btn>
-        <v-btn style="margin-top: 3%; margin-left: 29%" variant="text" class="text-none">
+        <v-btn to="/sign" style="margin-top: 3%; margin-left: 29%" variant="text" class="text-none">
           Create Account
         </v-btn>
       </v-card-text>
@@ -31,6 +31,9 @@
 </template>
 <script>
 export default {
-  name: 'Login'
+  name: 'Login',
+  data: () => ({
+    visible: false,
+  }),
 }
 </script>
