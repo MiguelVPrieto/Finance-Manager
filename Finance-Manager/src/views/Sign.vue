@@ -12,12 +12,25 @@
       <v-card-text class="bg-surface-light pt-4">
         <v-form fast-fail @submit.prevent>
 
-          <v-text-field v-model="email" :rules="emailRules" label="Email" prepend-icon="mdi-email"></v-text-field>
-          <v-text-field v-model="firstName" :rules="firstNameRules" label="First Name" prepend-icon="mdi-email"></v-text-field>
+          <v-text-field :rules="emailRules" label="Email" prepend-icon="mdi-email"></v-text-field>
+          <v-text-field :rules="firstNameRules" label="First Name" prepend-icon="mdi-account"></v-text-field>
           <v-text-field
-            v-model="lastName"
-            :rules="lastNameRules"
-            label="Last name"
+            :append-inner-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="visible ? 'text' : 'password'"
+            label="Password"
+            :rules="passwordRules"
+            prepend-icon="mdi-key"
+            v-model="password"
+            @click:append-inner="visible = !visible"
+          ></v-text-field>
+          <v-text-field
+            :append-inner-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
+            :type="visible ? 'text' : 'password'"
+            label="Confirm Password"
+            :rules="confirmPasswordRules()"
+            prepend-icon="mdi-key"
+            v-model="confirmPassword"
+            @click:append-inner="visible = !visible"
           ></v-text-field>
 
           <v-btn class="mt-2" type="submit" block>Submit</v-btn>
@@ -30,23 +43,44 @@
 <script>
 export default {
   name: 'Sign',
-  data: () => ({
-    firstName: '',
-    firstNameRules: [
-      value => {
-        if (value?.length > 3) return true
-
-        return 'First name must be at least 3 characters.'
-      },
-    ],
-    lastName: '123',
-    lastNameRules: [
-      value => {
-        if (/[^0-9]/.test(value)) return true
-
-        return 'Last name can not contain digits.'
-      },
-    ],
-  }),
+  data: () => {
+    return ({
+      visible: false,
+      password: '',
+      confirmPassword: '',
+      firstNameRules: [
+        value => {
+          if (value?.length < 3) {
+            return 'First name must be at least 3 characters.';
+          } else if (!/[a-z]/i.test(value)) {
+            return 'First name must contain only letters.';
+          }
+        },
+      ],
+      emailRules: [
+        value => {
+          if (value?.length < 3) {
+            return 'Email must be at least 3 characters.';
+          }
+        }
+      ],
+      passwordRules: [
+        value => {
+          if (value?.length < 5) {
+            return 'Password must be at least 5 characters.';
+          }
+        }
+      ],
+      confirmPasswordRules: function() {
+        return [
+          value => {
+            if (value !== this.password) {
+              return 'Password must be the same.';
+            }
+          }
+        ];
+      }
+    });
+  },
 }
 </script>
