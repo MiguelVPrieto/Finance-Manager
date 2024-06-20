@@ -54,6 +54,8 @@ export default {
             return 'First name must be at least 3 characters.';
           } else if (!/[a-z]/i.test(value)) {
             return 'First name must contain only letters.';
+          } else if (value?.length > 255) {
+            return 'First name must be less than 255 characters.';
           }
         },
       ],
@@ -61,6 +63,8 @@ export default {
         value => {
           if (value?.length < 3) {
             return 'Email must be at least 3 characters.';
+          } else if (value?.length > 255) {
+            return 'Email must be less than 255 characters.';
           }
         }
       ],
@@ -68,6 +72,8 @@ export default {
         value => {
           if (value?.length < 5) {
             return 'Password must be at least 5 characters.';
+          } else if (value?.length > 255) {
+            return 'Password must be less than 255 characters.';
           }
         }
       ],
