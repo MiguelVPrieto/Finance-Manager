@@ -32,7 +32,7 @@
             v-model="confirmPassword"
           ></v-text-field>
 
-          <v-btn class="mt-2" type="submit" block>Submit</v-btn>
+          <v-btn class="mt-2" type="submit" block>Create</v-btn>
         </v-form>
       </v-card-text>
     </v-card>
