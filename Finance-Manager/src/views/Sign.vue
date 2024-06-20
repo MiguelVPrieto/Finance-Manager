@@ -10,7 +10,23 @@
       </template>
 
       <v-card-text class="bg-surface-light pt-4">
+        <v-form fast-fail @submit.prevent>
 
+          <v-text-field label="Email" prepend-icon="mdi-email"></v-text-field>
+          <v-text-field
+            v-model="firstName"
+            :rules="firstNameRules"
+            label="First name"
+          ></v-text-field>
+
+          <v-text-field
+            v-model="lastName"
+            :rules="lastNameRules"
+            label="Last name"
+          ></v-text-field>
+
+          <v-btn class="mt-2" type="submit" block>Submit</v-btn>
+        </v-form>
       </v-card-text>
     </v-card>
     <p style="text-align: center; margin-top: 18%;">&copy Blavblav Inc - June 2024</p>
@@ -18,6 +34,24 @@
 </template>
 <script>
 export default {
-  name: 'Sign'
+  name: 'Sign',
+  data: () => ({
+    firstName: '',
+    firstNameRules: [
+      value => {
+        if (value?.length > 3) return true
+
+        return 'First name must be at least 3 characters.'
+      },
+    ],
+    lastName: '123',
+    lastNameRules: [
+      value => {
+        if (/[^0-9]/.test(value)) return true
+
+        return 'Last name can not contain digits.'
+      },
+    ],
+  }),
 }
 </script>
