@@ -5,17 +5,17 @@
         <span class="font-weight-black">Welcome to Finance Manager</span>
       </template>
       <v-card-text class="bg-surface-light pt-4">
-        <v-form fast-fail @submit.prevent="submitForm">
+        <v-form ref="form" fast-fail @submit.prevent="submitForm">
           <v-text-field v-model="formData.email" :rules="emailRules" label="Email" prepend-icon="mdi-email"></v-text-field>
           <v-text-field v-model="formData.firstName" :rules="firstNameRules" label="First Name" prepend-icon="mdi-account"></v-text-field>
           <v-text-field
-            :append-inner-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="visible ? 'text' : 'password'"
+            :append-inner-icon="visible? 'di-eye' : 'di-eye-off'"
+            :type="visible? 'text' : 'password'"
             label="Password"
             :rules="passwordRules"
             prepend-icon="mdi-key"
             v-model="formData.password"
-            @click:append-inner="visible = !visible"
+            @click:append-inner="visible =!visible"
           ></v-text-field>
           <v-btn class="mt-2" type="submit" block>Create</v-btn>
         </v-form>
@@ -52,13 +52,20 @@ export default {
   }),
   methods: {
     async submitForm() {
-      try {
-        const response = await axios.post('http://localhost:8080/submit-form', this.formData);
-        console.log(response.data);
-        this.$router.push('/'); // or this.$emit('success', 'User created successfully');
-      } catch (error) {
-        console.error('There was an error!', error);
-        this.$emit('error', 'Error creating user');
+      if (this.$refs.form.validate()) {
+        if (this.formData.email && this.formData.firstName && this.formData.password) {
+          try {
+            const response = await axios.post('http://localhost:8080/submit-form', this.formData);
+            console.log(response.data);
+            this.$router.push('/'); // or this.$emit('success', 'User created successfully');
+          } catch (error) {
+            console.error('There was an error!', error);
+            this.$emit('error', 'Error creating user');
+          }
+        } else {
+          console.error('Please fill in all fields');
+          // You can also display an error message to the user here
+        }
       }
     }
   }
