@@ -44,7 +44,7 @@ app.post('/submit-form', (req, res) => {
 
     const prev_id = results[0].max_id || 0;
     const new_id = prev_id + 1;
-    
+
     const insertQuery = 'INSERT INTO users (idusers, user_name, user_email, user_password) VALUES (?, ?, ?, ?)';
     db.query(insertQuery, [new_id, firstName, email, password], (err, result) => {
       if (err) {
@@ -55,4 +55,10 @@ app.post('/submit-form', (req, res) => {
       res.send('User added successfully');
     });
   });
+});
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
