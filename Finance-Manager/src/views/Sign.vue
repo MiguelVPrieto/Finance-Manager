@@ -9,7 +9,7 @@
           <v-text-field v-model="formData.email" :rules="emailRules" label="Email" prepend-icon="mdi-email"></v-text-field>
           <v-text-field v-model="formData.firstName" :rules="firstNameRules" label="First Name" prepend-icon="mdi-account"></v-text-field>
           <v-text-field
-            :append-inner-icon="visible? 'di-eye' : 'di-eye-off'"
+            :append-inner-icon="visible? 'mdi-eye' : 'mdi-eye-off'"
             :type="visible? 'text' : 'password'"
             label="Password"
             :rules="passwordRules"

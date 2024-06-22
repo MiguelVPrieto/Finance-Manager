@@ -47,8 +47,37 @@ app.post('/submit-form', (req, res) => {
   });
 });
 
-const port = process.env.PORT || 8080;
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
 
+  const query = 'SELECT * FROM users WHERE user_email = ?';
+  db.query(query, [email], (err, result) => {
+    if (err) {
+      console.error('Error querying database:', err);
+      return res.status(500).send({ isValid: false });
+    }
+
+    if (result.length === 0) {
+      return res.send({ isValid: false });
+    }
+
+    const user = result[0];
+    bcrypt.compare(password, user.user_password, (err, isMatch) => {
+      if (err) {
+        console.error('Error comparing passwords:', err);
+        return res.status(500).send({ isValid: false });
+      }
+
+      if (isMatch) {
+        res.send({ isValid: true });
+      } else {
+        res.send({ isValid: false });
+      }
+    });
+  });
+});
+
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
