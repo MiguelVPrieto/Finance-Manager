@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const cors = require('cors');
-const bcrypt = require('bcrypt'); // added for password hashing
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(bodyParser.json());

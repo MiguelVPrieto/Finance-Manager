@@ -57,14 +57,13 @@ export default {
           try {
             const response = await axios.post('http://localhost:8080/submit-form', this.formData);
             console.log(response.data);
-            this.$router.push('/'); // or this.$emit('success', 'User created successfully');
+            this.$router.push('/');
           } catch (error) {
             console.error('There was an error!', error);
             this.$emit('error', 'Error creating user');
           }
         } else {
           console.error('Please fill in all fields');
-          // You can also display an error message to the user here
         }
       }
     }
