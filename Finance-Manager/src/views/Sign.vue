@@ -53,7 +53,7 @@ export default {
   methods: {
     async submitForm() {
       try {
-        const response = await axios.post('http://localhost:3000/submit-form', this.formData);
+        const response = await axios.post('http://localhost:8080/submit-form', this.formData);
         console.log(response.data);
         this.$router.push('/login'); // or this.$emit('success', 'User created successfully');
       } catch (error) {

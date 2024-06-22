@@ -6,7 +6,10 @@ const bcrypt = require('bcrypt'); // added for password hashing
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 
 const db = mysql.createConnection({
   host: 'localhost',
