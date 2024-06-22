@@ -19,6 +19,7 @@
           prepend-icon="mdi-key"
           @click:append-inner="visible = !visible"
         ></v-text-field>
+        <p v-if="!isValid" style="color: red; margin-top: 1%; margin-bottom: 5%; text-align: center; ">Account does not exist or invalid credentials</p>
         <v-btn @click="login" style="margin-left: 38%;">
           Login
         </v-btn>
@@ -40,7 +41,7 @@ export default {
     visible: false,
     email: '',
     password: '',
-    isValid: false
+    isValid: true
   }),
   methods: {
     async login() {
@@ -55,9 +56,11 @@ export default {
           this.$router.push('/home');
         } else {
           console.log('Invalid credentials');
+          this.isValid = false;
         }
       } catch (error) {
         console.error('Error logging in:', error);
+        this.isValid = false;
       }
     }
   }
