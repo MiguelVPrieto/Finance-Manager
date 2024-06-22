@@ -35,7 +35,6 @@ db.connect((err) => {
 app.post('/submit-form', (req, res) => {
   const { firstName, email, password } = req.body;
 
-  // Query to get the current highest idusers value
   const getMaxIdQuery = 'SELECT MAX(idusers) AS max_id FROM users';
   db.query(getMaxIdQuery, (err, results) => {
     if (err) {
@@ -45,8 +44,7 @@ app.post('/submit-form', (req, res) => {
 
     const prev_id = results[0].max_id || 0;
     const new_id = prev_id + 1;
-
-    // Insert the new user with the incremented idusers
+    
     const insertQuery = 'INSERT INTO users (idusers, user_name, user_email, user_password) VALUES (?, ?, ?, ?)';
     db.query(insertQuery, [new_id, firstName, email, password], (err, result) => {
       if (err) {
