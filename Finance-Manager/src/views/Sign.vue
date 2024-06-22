@@ -55,7 +55,7 @@ export default {
       try {
         const response = await axios.post('http://localhost:8080/submit-form', this.formData);
         console.log(response.data);
-        this.$router.push('/login'); // or this.$emit('success', 'User created successfully');
+        this.$router.push('/'); // or this.$emit('success', 'User created successfully');
       } catch (error) {
         console.error('There was an error!', error);
         this.$emit('error', 'Error creating user');
