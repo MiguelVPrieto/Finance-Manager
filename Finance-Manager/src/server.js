@@ -26,12 +26,25 @@ db.connect((err) => {
 // Create a route to handle form submissions
 app.post('/submit-form', (req, res) => {
   const { firstName, email, password } = req.body;
-  const sql = 'INSERT INTO users (first_name, email, password) VALUES (?, ?, ?)';
-  db.query(sql, [firstName, email, password], (err, result) => {
+
+  // Query to get the current highest idusers value
+  const getMaxIdQuery = 'SELECT MAX(idusers) AS max_id FROM users';
+  db.query(getMaxIdQuery, (err, results) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.send('User added successfully');
+
+    const prev_id = results[0].max_id || 0;
+    const new_id = prev_id + 1;
+
+    // Insert the new user with the incremented idusers
+    const insertQuery = 'INSERT INTO users (idusers, user_name, user_email, user_password) VALUES (?, ?, ?, ?)';
+    db.query(insertQuery, [new_id, firstName, email, password], (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      res.send('User added successfully');
+    });
   });
 });
 
