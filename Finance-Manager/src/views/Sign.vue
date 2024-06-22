@@ -5,7 +5,7 @@
         <span class="font-weight-black">Welcome to Finance Manager</span>
       </template>
       <v-card-text class="bg-surface-light pt-4">
-        <v-form ref="form" fast-fail @submit.prevent="submitForm">
+        <v-form ref="form" fast-fail @submit.prevent="createAccount">
           <v-text-field v-model="formData.email" :rules="emailRules" label="Email" prepend-icon="mdi-email"></v-text-field>
           <v-text-field v-model="formData.firstName" :rules="firstNameRules" label="First Name" prepend-icon="mdi-account"></v-text-field>
           <v-text-field
@@ -51,11 +51,11 @@ export default {
     ]
   }),
   methods: {
-    async submitForm() {
+    async createAccount() {
       if (this.$refs.form.validate()) {
         if (this.formData.email && this.formData.firstName && this.formData.password) {
           try {
-            const response = await axios.post('http://localhost:8080/submit-form', this.formData);
+            const response = await axios.post('http://localhost:8080/create-account', this.formData);
             console.log(response.data);
             this.$router.push('/');
           } catch (error) {

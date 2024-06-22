@@ -26,25 +26,38 @@ db.connect((err) => {
   console.log('MySQL Connected...');
 });
 
-app.post('/submit-form', (req, res) => {
+app.post('/create-account', (req, res) => {
   const { firstName, email, password } = req.body;
+  const searchQuery = 'SELECT * FROM users WHERE user_email = ?';
 
-  bcrypt.hash(password, 10, (err, hash) => {
+  db.query(searchQuery, [email], (err, result) => {
     if (err) {
-      console.error('Error hashing password:', err);
-      return res.status(500).send('Error creating user');
+      console.error('Error querying database', err);
+      return res.status(500).send('Error querying database');
     }
 
-    const insertQuery = 'INSERT INTO users (user_name, user_email, user_password) VALUES (?, ?, ?)';
-    db.query(insertQuery, [firstName, email, hash], (err, result) => {
-      if (err) {
-        console.error('Error inserting user:', err.message);
-        return res.status(500).send('Error creating user');
-      }
-      console.log('User added successfully');
-      res.send('User added successfully');
-    });
-  });
+    if (!(result.length === 0)) {
+      console.log('Email already used');
+      return res.status(500).send('Email already used');
+    } else {
+      bcrypt.hash(password, 10, (err, hash) => {
+        if (err) {
+          console.error('Error hashing password:', err);
+          return res.status(500).send('Error creating user');
+        }
+
+        const insertQuery = 'INSERT INTO users (user_name, user_email, user_password) VALUES (?, ?, ?)';
+        db.query(insertQuery, [firstName, email, hash], (err, result) => {
+          if (err) {
+            console.error('Error inserting user:', err.message);
+            return res.status(500).send('Error creating user');
+          }
+          console.log('User added successfully');
+          res.send('User added successfully');
+        });
+      });
+    }
+  })
 });
 
 app.post('/login', (req, res) => {
