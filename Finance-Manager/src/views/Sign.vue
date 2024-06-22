@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Sign',
   data: () => ({
@@ -36,38 +38,25 @@ export default {
       password: ''
     },
     emailRules: [
-      value => !!value || 'Email is required',
+      value =>!!value || 'Email is required',
       value => /.+@.+\..+/.test(value) || 'Email must be valid'
     ],
     firstNameRules: [
-      value => !!value || 'First name is required',
+      value =>!!value || 'First name is required',
       value => (value && value.length >= 3) || 'First name must be at least 3 characters'
     ],
     passwordRules: [
-      value => !!value || 'Password is required',
+      value =>!!value || 'Password is required',
       value => (value && value.length >= 5) || 'Password must be at least 5 characters'
     ]
   }),
   methods: {
     async submitForm() {
       try {
-        const response = await fetch('/submitForm', {  // Ensure this matches your backend endpoint
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.formData)
-        });
-
-        const result = await response.json();
-        console.log(result);
-
-        // Optionally, reset the form fields after successful submission
-        this.formData.firstName = '';
-        this.formData.email = '';
-        this.formData.password = '';
+        const response = await axios.post('http://localhost:3000/submit-form', this.formData);
+        console.log(response.data);
       } catch (error) {
-        console.error('Error:', error);
+        console.error('There was an error!', error);
       }
     }
   }
