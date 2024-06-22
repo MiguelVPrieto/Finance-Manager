@@ -32,14 +32,29 @@ db.connect((err) => {
   });
 });
 
+app.post('/submit-form', (req, res) => {
+  const { firstName, email, password } = req.body;
 
+  // Query to get the current highest idusers value
+  const getMaxIdQuery = 'SELECT MAX(idusers) AS max_id FROM users';
+  db.query(getMaxIdQuery, (err, results) => {
+    if (err) {
+      console.error('Error getting max id:', err.message);
+      return res.status(500).send('Error getting max id');
+    }
 
-db.query('SELECT 1 + 1 AS solution', (error, results, fields) => {
-  if (error) throw error;
-  console.log('The solution is: ', results[0].solution);
-});
+    const prev_id = results[0].max_id || 0;
+    const new_id = prev_id + 1;
 
-
-app.listen(3000, () => {
-  console.log('Server started on port 3000');
+    // Insert the new user with the incremented idusers
+    const insertQuery = 'INSERT INTO users (idusers, user_name, user_email, user_password) VALUES (?, ?, ?, ?)';
+    db.query(insertQuery, [new_id, firstName, email, password], (err, result) => {
+      if (err) {
+        console.error('Error inserting user:', err.message);
+        return res.status(500).send('Error inserting user');
+      }
+      console.log('User added successfully');
+      res.send('User added successfully');
+    });
+  });
 });
