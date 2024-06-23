@@ -67,6 +67,9 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    document.title = 'Finance Manager';
   }
 }
 </script>
