@@ -39,6 +39,7 @@ app.post('/create-account', (req, res) => {
     if (!(result.length === 0)) {
       console.log('Email already used');
       return res.status(500).send('Email already used');
+      return res.send({isUsed: true});
     } else {
       bcrypt.hash(password, 10, (err, hash) => {
         if (err) {
@@ -54,6 +55,7 @@ app.post('/create-account', (req, res) => {
           }
           console.log('User added successfully');
           res.send('User added successfully');
+          return res.send({isUsed: false});
         });
       });
     }

@@ -17,8 +17,9 @@
             v-model="formData.password"
             @click:append-inner="visible =!visible"
           ></v-text-field>
-          <v-btn class="mt-2" type="submit" block>Create</v-btn>
         </v-form>
+        <v-alert v-if="isUsed" type="error" style="margin-top: 1%; margin-bottom: 5%; text-align: center;">Account with this email already exists</v-alert>
+        <v-btn class="mt-2" type="submit" block>Create</v-btn>
       </v-card-text>
     </v-card>
     <p style="text-align: center; margin-top: 18%;">&copy Blavblav Inc - June 2024</p>
@@ -32,6 +33,7 @@ export default {
   name: 'Sign',
   data: () => ({
     visible: false,
+    isUsed: false,
     formData: {
       firstName: '',
       email: '',
@@ -56,8 +58,13 @@ export default {
         if (this.formData.email && this.formData.firstName && this.formData.password) {
           try {
             const response = await axios.post('http://localhost:8080/create-account', this.formData);
-            console.log(response.data);
-            this.$router.push('/');
+            this.isUsed = response.data.isUsed === true;
+            if (this.isUsed) {
+              console.log('Email already used');
+            } else {
+              console.log(response.data);
+              this.$router.push('/');
+            }
           } catch (error) {
             console.error('There was an error!', error);
             this.$emit('error', 'Error creating user');
