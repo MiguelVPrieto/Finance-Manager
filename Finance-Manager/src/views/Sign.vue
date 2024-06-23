@@ -9,7 +9,7 @@
           <v-text-field v-model="formData.email" :rules="emailRules" label="Email" prepend-icon="mdi-email"></v-text-field>
           <v-text-field v-model="formData.firstName" :rules="firstNameRules" label="First Name" prepend-icon="mdi-account"></v-text-field>
           <v-text-field
-            :append-inner-icon="visible? 'mdi-eye' : 'mdi-eye-off'"
+            :append-inner-icon="visible? 'di-eye' : 'di-eye-off'"
             :type="visible? 'text' : 'password'"
             label="Password"
             :rules="passwordRules"
@@ -18,7 +18,7 @@
             @click:append-inner="visible =!visible"
           ></v-text-field>
         </v-form>
-        <v-alert v-if="isUsed" type="error" style="margin-top: 1%; margin-bottom: 5%; text-align: center;">Account with this email already exists</v-alert>
+        <p v-if="isUsed" style="color: red; margin-top: 1%; margin-bottom: 5%; text-align: center;">{{ errorMessage }}</p>
         <v-btn class="mt-2" type="submit" block>Create</v-btn>
       </v-card-text>
     </v-card>
@@ -34,21 +34,22 @@ export default {
   data: () => ({
     visible: false,
     isUsed: false,
+    errorMessage: '',
     formData: {
       firstName: '',
       email: '',
       password: ''
     },
     emailRules: [
-      value =>!!value || 'Email is required',
+      value => !!value || 'Email is required',
       value => /.+@.+\..+/.test(value) || 'Email must be valid'
     ],
     firstNameRules: [
-      value =>!!value || 'First name is required',
+      value => !!value || 'First name is required',
       value => (value && value.length >= 3) || 'First name must be at least 3 characters'
     ],
     passwordRules: [
-      value =>!!value || 'Password is required',
+      value => !!value || 'Password is required',
       value => (value && value.length >= 5) || 'Password must be at least 5 characters'
     ]
   }),
@@ -59,6 +60,7 @@ export default {
           try {
             const response = await axios.post('http://localhost:8080/create-account', this.formData);
             this.isUsed = response.data.isUsed === true;
+            this.errorMessage = response.data.message;
             if (this.isUsed) {
               console.log('Email already used');
             } else {
@@ -68,6 +70,9 @@ export default {
           } catch (error) {
             console.error('There was an error!', error);
             this.$emit('error', 'Error creating user');
+          } finally {
+            this.isUsed = false;
+            this.errorMessage = '';
           }
         } else {
           console.error('Please fill in all fields');

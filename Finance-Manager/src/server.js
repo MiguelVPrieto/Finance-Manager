@@ -28,34 +28,32 @@ db.connect((err) => {
 
 app.post('/create-account', (req, res) => {
   const { firstName, email, password } = req.body;
-  const searchQuery = 'SELECT * FROM users WHERE user_email = ?';
+  const searchQuery = 'SELECT * FROM users WHERE user_email =?';
 
   db.query(searchQuery, [email], (err, result) => {
     if (err) {
       console.error('Error querying database', err);
-      return res.status(500).send('Error querying database');
+      return res.status(500).send({ isUsed: true, message: 'Error querying database' });
     }
 
     if (!(result.length === 0)) {
       console.log('Email already used');
-      return res.status(500).send('Email already used');
-      return res.send({isUsed: true});
+      return res.send({ isUsed: true, message: 'Email already used' });
     } else {
       bcrypt.hash(password, 10, (err, hash) => {
         if (err) {
           console.error('Error hashing password:', err);
-          return res.status(500).send('Error creating user');
+          return res.status(500).send({ isUsed: true, message: 'Error creating user' });
         }
 
-        const insertQuery = 'INSERT INTO users (user_name, user_email, user_password) VALUES (?, ?, ?)';
+        const insertQuery = 'INSERT INTO users (user_name, user_email, user_password) VALUES (?,?,?)';
         db.query(insertQuery, [firstName, email, hash], (err, result) => {
           if (err) {
             console.error('Error inserting user:', err.message);
-            return res.status(500).send('Error creating user');
+            return res.status(500).send({ isUsed: true, message: 'Error creating user' });
           }
           console.log('User added successfully');
-          res.send('User added successfully');
-          return res.send({isUsed: false});
+          res.send({ isUsed: false, message: 'User created successfully' });
         });
       });
     }
